@@ -30,8 +30,8 @@ class XPS:
 				ret += XPS.__sockets[socketId].recv(1024)
 		except socket.timeout:
 			return [-2, '']
-		except socket.error (errNb, errString):
-			print 'Socket error : ' + errString
+		except socket.error:
+			print 'Socket error'
 			return [-2, '']
 
 		for i in range(len(ret)):
@@ -39,7 +39,7 @@ class XPS:
 				return [int(ret[0:i]), ret[i+1:-9]]
 
 	# TCP_ConnectToServer
-	def TCP_ConnectToServer (self, IP, port, timeOut):
+	def TCP_ConnectToServer (self, IP, port, timeOut, blocking=0):
 		socketId = 0
 		if (XPS.__nbSockets < self.MAX_NB_SOCKETS):
 			while (XPS.__usedSockets[socketId] == 1 and socketId < self.MAX_NB_SOCKETS):
@@ -55,7 +55,7 @@ class XPS:
 			XPS.__sockets[socketId] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			XPS.__sockets[socketId].connect((IP, port))
 			XPS.__sockets[socketId].settimeout(timeOut)
-			XPS.__sockets[socketId].setblocking(1)
+			XPS.__sockets[socketId].setblocking(blocking)
 		except socket.error:
 			return -1
 
