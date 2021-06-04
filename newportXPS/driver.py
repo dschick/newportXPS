@@ -24,14 +24,14 @@ class XPS:
 	# Send command and get return
 	def __sendAndReceive (self, socketId, command):
 		try:
-			XPS.__sockets[socketId].send(command)
-			ret = XPS.__sockets[socketId].recv(1024)
+			XPS.__sockets[socketId].send(command.encode("utf-8"))
+			ret = XPS.__sockets[socketId].recv(1024).decode("utf-8")
 			while (ret.find(',EndOfAPI') == -1):
-				ret += XPS.__sockets[socketId].recv(1024)
+				ret += XPS.__sockets[socketId].recv(1024).decode("utf-8")
 		except socket.timeout:
 			return [-2, '']
 		except socket.error:
-			print 'Socket error'
+			print ('Socket error')
 			return [-2, '']
 
 		for i in range(len(ret)):
